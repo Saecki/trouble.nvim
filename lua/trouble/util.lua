@@ -2,9 +2,27 @@ local config = require("trouble.config")
 
 local M = {}
 
-function M.jump_to_item(win, precmd, item)
+function M.get_current_pos()
+  local from = { vim.fn.bufnr("%"), vim.fn.line("."), vim.fn.col("."), 0 }
+  local items = { { tagname = vim.fn.expand("<cword>"), from = from } }
+  return { win_id = vim.fn.win_getid(), items = items }
+end
+
+function M.save_current_pos()
+  M.save_pos(M.get_current_pos())
+end
+
+function M.save_pos(from_pos)
+  vim.fn.settagstack(from_pos.win_id, { items = from_pos.items }, "t")
+end
+
+function M.jump_to_item(win, precmd, item, from_pos)
   -- requiring here, as otherwise we run into a circular dependency
   local View = require("trouble.view")
+
+  if from_pos then
+    M.save_pos(from_pos)
+  end
 
   View.switch_to(win)
   if precmd then

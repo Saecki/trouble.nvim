@@ -428,7 +428,7 @@ function View:jump(opts)
     folds.toggle(item.filename)
     self:update()
   else
-    util.jump_to_item(opts.win or self.parent, opts.precmd, item)
+    util.jump_to_item(opts.win or self.parent, opts.precmd, item, opts.from_pos)
   end
 end
 

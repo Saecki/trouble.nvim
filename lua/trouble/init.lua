@@ -58,6 +58,8 @@ function Trouble.open(...)
   end
   opts.focus = true
 
+  util.save_current_pos()
+
   if is_open() then
     Trouble.refresh(opts)
   elseif not opts.auto and vim.tbl_contains(config.options.auto_jump, opts.mode) then
